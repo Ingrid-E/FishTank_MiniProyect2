@@ -203,7 +203,6 @@ public class GameWindow extends JPanel{
 	 * @param card2 //Card position
 	 */
 	private void notMatching(int card1, int card2) {
-		System.out.println("No iguales");
 		card[card1].setState(0);
 		card[card2].setState(0);
 	}
