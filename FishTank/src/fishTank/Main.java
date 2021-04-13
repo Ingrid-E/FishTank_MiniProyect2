@@ -1,22 +1,29 @@
 package fishTank;
-
-import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+/**
+ * @author Ingrid-E {@link https://github.com/Ingrid-E}
+ * Main class that controls the window that are shown.
+ * Main Menu, Game, End Window and Rules.
+ * @version 1.0
+ */
 
 public class Main {
+	/* Atributes, diferent windows and mouse adapter */
 	private static JFrame window;
 	private static MainWindow menu; 
 	private static GameWindow game;
 	private static EndWindow end;
-	private static JOptionPane gameLost;
-	private static String windowShowing;
 	private static RulesWindow rules;
-
+	private static MouseAdapter listen;
+	/**
+	 * Shows the window
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		
 		EventQueue.invokeLater(new Runnable() {
@@ -35,10 +42,32 @@ public class Main {
 		});
 
 	}
-	
+	/**
+	 * Initilices objects and basic window atributes
+	 */
 	private static void initGUI() {
+		//Initilizing objects
 		window = new JFrame();
-		windowShowing = "menu";
+		window.setFocusable(true);
+		//Using Mouse Adapter to drag the window around the screen
+		listen = new MouseAdapter() {
+			private int x,y;
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				window.setLocation(window.getLocation().x+e.getX()-x, 
+						window.getLocation().y +e.getY()-y);
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				x = e.getX();
+				y = e.getY();
+				
+			}
+		};
+		//Adding mouse listener
+		window.addMouseListener(listen);
+		window.addMouseMotionListener(listen);
 		//Different Windows
 		menu = new MainWindow();
 		game = new GameWindow();
@@ -46,18 +75,23 @@ public class Main {
 		rules = new RulesWindow();
 		//Window 
 		window.add(menu);
-		
 		window.setUndecorated(true);
 		window.setSize(800,600);
 		window.setLocationRelativeTo(null);
 		window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
+		//Starting timers
 		timer();
 	}
-	
+	/**
+	 * Changes the window shown by removing and adding new component in window
+	 * @param string show
+	 */
 	private static void changeWindow(String show) {
+		//Removing all components
 		window.getContentPane().removeAll();
+		//Adding new component
 		switch(show) {
 		case "Game":
 			game = new GameWindow();
@@ -83,7 +117,10 @@ public class Main {
 		window.repaint();
 		
 	}
-	
+	/**
+	 * Timer that checks every window if its visible and if a change window 
+	 * button is pressed
+	 */
 	private static void timer() {
 		Timer timer = new Timer();
 		TimerTask task = new TimerTask() {

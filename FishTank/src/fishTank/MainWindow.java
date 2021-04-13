@@ -2,37 +2,22 @@ package fishTank;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Insets;
 import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.Graphics;
-import java.awt.GraphicsEnvironment;
-
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
-
-import components.RoundedBorder;
 import java.awt.Component;
 import java.awt.Cursor;
-
+/**
+ * @author Ingrid-E {@link https://github.com/Ingrid-E}
+ * Main Window GUI, 
+ * @version 1.0
+ */
 public class MainWindow extends JPanel{
 
 	private static final long serialVersionUID = 1L;
@@ -41,6 +26,10 @@ public class MainWindow extends JPanel{
 	private JLabel title;
 	private Listen mouseClick;
 	protected Boolean playClicked, rulesClicked;
+
+	/**
+	 * Public Main Window Constructor, starts components.
+	 */
 	public MainWindow() {
 		
 		window = this;
@@ -66,7 +55,9 @@ public class MainWindow extends JPanel{
 		this.setVisible(true);
 	
 	}
-	
+	/**
+	 * Main Window GUI
+	 */
 	private void initGUI() {
 		//Game Title
 		title.setBounds(88, 103, 626, 92);
@@ -115,7 +106,11 @@ public class MainWindow extends JPanel{
 		background.setBounds(0, 0, 800, 600);
 		add(background);
 	}
-
+	/**
+	 * @author Ingrid-E {@link https://github.com/Ingrid-E}
+	 * Checks button pressed to go change boolean state and change 
+	 * cursor look if its over a button
+	 */
 	class Listen  implements MouseListener{
 		@Override
 		public void mouseClicked(MouseEvent e) {

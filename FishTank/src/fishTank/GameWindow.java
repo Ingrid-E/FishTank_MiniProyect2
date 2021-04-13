@@ -2,7 +2,6 @@ package fishTank;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -12,28 +11,24 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Cursor;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
 import java.awt.GridLayout;
 import java.awt.Font;
-import javax.swing.border.BevelBorder;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JTextField;
+/**
+ * @author Ingrid-E {@link https://github.com/Ingrid-E}
+ * Game window that contains the game gui and controls.
+ * @version 1.0
+ */
 
 public class GameWindow extends JPanel{
+	//Atributes
 	private static final long serialVersionUID = 1L;
 	private Card[] card;
 	private JPanel cardPanel, textPanel;
 	private JLabel levelText, pointsText;
-	private JLabel[] fishCard;
 	private FishTank aquarium;
 	private JButton endGame;
 	private Listen listen;
@@ -43,46 +38,50 @@ public class GameWindow extends JPanel{
 	private Boolean matchingCards, gameEnded;
 	private int[] flipped;
 	private int[][] cardSizes;
-	
+	/**
+	 * GameWindow constructor initializing basic atributes
+	 */
 	public GameWindow() {
+		
+		
+		//Initializing atributes and objects
 		level = 1;
-		initGUI();
 		points = 0;
 		acumulatedPoints = 0;
 		cardQuantity = 4;
 		gameCardsFlipped = 0;
+		//Starting GUI
+		initGUI();
 		gameEnded = false;
 		cardSizes = new int[][]{{150,225,2,2},{145,217,2,3},{118,190,2,4},{113,148,3,4}};
 		cardPanel.setLayout(new GridLayout(cardSizes[0][2], cardSizes[0][3]));
 		card = new Card[cardQuantity];
-		fishCard = new JLabel[8];
 		cardWidth = 150;
 		cardHeight = 225;
 		listen = new Listen();
 		matchingCards = false;
 		flipped = new int[2];
 		cardPanelGUI();
-		
+		//window 
 		setBackground(new Color(176, 224, 230));		
 		this.setSize(800,600);
 		this.setVisible(true);
 	}
-	
+	/**
+	 * Reloads the window for the next level
+	 * adding a level and changin the card positions.
+	 */
 	private void nextLevel() {
-		
+		//Initilizing atributes changed
 		level = level + 1;
 		cardQuantity = cardQuantity + 2;
 		gameCardsFlipped = 0;
-		flipped = null;
 		flipped = new int[2];
-
 		listen.cardsFlipped = 0;
-		/*for(int i=0; i<card.length; i++) {
-			System.out.println("Removing card["+i+"]");
-			cardPanel.remove(card[i]);
-		}*/
+		//Remove last level cards
 		cardPanel.removeAll();
 		cardPanel.revalidate();
+		//Max cards shown are 12
 		if(level >4) {
 			cardPanel.setLayout(new GridLayout(cardSizes[3][2], cardSizes[3][3]));
 			cardWidth = cardSizes[3][0];
@@ -94,24 +93,31 @@ public class GameWindow extends JPanel{
 			cardHeight = cardSizes[level-1][1];
 			
 		}
+		//New cards
 		card = new Card[cardQuantity];
-		matchingCards = false;
 		
+		matchingCards = false;
 		levelText.setText("Level: " + level);
+		//Refreshes aquarium
 		aquarium.removeFishes();
 		aquarium.repaint();
-		
 		cardPanelGUI();
 
 	}
 	
-	
+	/**
+	 * True if game ended, false if on-going.
+	 * @return boolean gameEnded
+	 */
 	public boolean didGameEnd() {
 		return gameEnded;
 	}
-	
+	/**
+	 * Randomly adds pair of cards to the cardPanelGUI
+	 */
 	private void cardPanelGUI() {
 		int pair = 0;
+		//initilizes cards with size and id
 		for(int i=0; i<cardQuantity; i++) {
 			card[i] = new Card(cardWidth, cardHeight, pair);
 
@@ -129,6 +135,7 @@ public class GameWindow extends JPanel{
 			card[random] = card[i];
 			card[i] = temp;
 		}
+		//Adds cards to JPanel
 		for(int i=0; i<cardQuantity; i++) {
 			card[i].addMouseListener(listen);
 			cardPanel.add(card[i]);
@@ -136,13 +143,18 @@ public class GameWindow extends JPanel{
 
 		cardPanel.revalidate();
 		cardPanel.repaint();
-		//cardPanel.validate();
 	}
 	
-	
+	/**
+	 * Checks if two cards are the same by 
+	 * checking the id of the card. Then adds or rest points.
+	 * Also checks if points > 0, if not game is lost.
+	 * @param card1 //Card position
+	 * @param card2 //Card position
+	 */
 	private void checkifMatching(int card1, int card2) {
 		
-		
+		//Matching cards, add fishes and points
 		if(card[card1].getId() == card[card2].getId()) {
 			matchingCards = true;
 			points++;
@@ -151,41 +163,53 @@ public class GameWindow extends JPanel{
 			aquarium.addFish(card[card1].getId());
 			aquarium.repaint();
 			timer(300, 60);
-		} else{
+		} 
+		//Not Matching cards
+		else{
 			if(card[card1].getAlreadyFlipped() == true || card[card2].getAlreadyFlipped() == true) {
 				points--;
 			}
 			matchingCards = false;
 			timer(0,1000);
 		}
+		//Sets the card boolean value to already flipped
 		card[card1].setAlreadyFlipped(true);
 		card[card2].setAlreadyFlipped(true);
+		//Checks game state
 		if(points < 0) {
 			gameEnded = true;
 		}
-		System.out.println("game ended?: " + gameEnded);
 		pointsText.setText("Points: " + points);
 	}
-	
+	/**
+	 * If Cards are matching then they will fade and remove listener
+	 * @param card1 //Card position
+	 * @param card2 //Card position
+	 * @param float opacity
+	 */
 	private void isMatching(int card1, int card2, float opacity) {
+		//If opacity is 0 then remove listener
 		if(opacity == 0) {
 			card[card1].removeMouseListener(listen);
 			card[card2].removeMouseListener(listen);
 		}
+		//Changes the opacity
 		card[card1].fadeCard(opacity);
 		card[card2].fadeCard(opacity);
 	}
-	
+	/**
+	 * If Cards are not matching then flippes them over again
+	 * @param card1 //Card position
+	 * @param card2 //Card position
+	 */
 	private void notMatching(int card1, int card2) {
 		System.out.println("No iguales");
 		card[card1].setState(0);
 		card[card2].setState(0);
 	}
-	
-	
-	
-	
-	
+	/**
+	 * Initilizes the GUI by adding the elements in the position
+	 */
 	private void initGUI() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{25, 0, 525, 250,10};
@@ -268,8 +292,11 @@ public class GameWindow extends JPanel{
 		gbc_endGame.gridy = 3;
 		add(endGame, gbc_endGame);
 	}
-	
-	
+	/**
+	 * Timer that flipps cards controls opacity
+	 * @param startDelay
+	 * @param period
+	 */
 	private void timer(int startDelay, int period) {
 		Timer timer = new Timer();
 		TimerTask task = new TimerTask() {
@@ -302,7 +329,14 @@ public class GameWindow extends JPanel{
 		timer.scheduleAtFixedRate(task, startDelay, period);
 	}
 	
-	
+	/**
+	 * @author Ingrid-E {@link https://github.com/Ingrid-E}
+	 * Mouse Listener that identifies when two cards is clicked
+	 * so it can be checked if its matching or not.
+	 * 
+	 * Algo checks buttons.
+	 *
+	 */
 	class Listen  implements MouseListener{
 		public int cardsFlipped = 0;
 		private Card lastPressed;

@@ -1,31 +1,27 @@
 package fishTank;
 
 import java.awt.Color;
-import java.awt.Component;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.ComponentOrientation;
 import java.awt.Cursor;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
-import java.awt.GridLayout;
-import javax.swing.BoxLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import javax.swing.border.LineBorder;
-import java.awt.Insets;
-
+/**
+ * @author Ingrid-E {@link https://github.com/Ingrid-E}
+ * End Window GUI that shows final acumulates points and final level
+ * @version 1.0
+ */
 public class EndWindow extends JPanel{
+	//Creating Atributes
 	private static final long serialVersionUID = 1L;
 	private FishTank aquarium;
 	private JLabel endTitle, finalInfo, background;
@@ -33,7 +29,11 @@ public class EndWindow extends JPanel{
 	private JButton playAgain, mainMenu, exit;
 	protected Boolean againClicked, menuClicked;
 	private Listen listen;
-	
+	/**
+	 * EndWindow Constructor
+	 * @param points //<= Acumulated Points
+	 * @param level
+	 */
 	public EndWindow(int points, int level) {
 		listen = new Listen();
 		//Object
@@ -55,15 +55,18 @@ public class EndWindow extends JPanel{
 		finalInfo = new JLabel("<html>Total <br> Points: " + points + "<br><br>Level: " +level+ "</html>");
 		finalInfo.setBounds(22, 11, 397, 198);
 		background = new JLabel();
+		//Starting GUI
 		initGUI();
-
+		//window basic atributes
 		setBackground(new Color(176, 224, 230));		
 		this.setSize(800,600);
 		this.setVisible(true);
 		
 		
 	}
-	
+	/**
+	 * Adding objects atributes and adding them to the JFrame
+	 */
 	private void initGUI() {
 		
 		exit.setFocusPainted(false);
@@ -122,7 +125,10 @@ public class EndWindow extends JPanel{
 		background.setBounds(0, 0, 800, 600);
 		add(background);
 	}
-	
+	/**
+	 * @author Ingrid-E {@link https://github.com/Ingrid-E}
+	 * Checks if a button is pressed or hovered and changed boolean value
+	 */
 	class Listen  implements MouseListener{
 		@Override
 		public void mouseClicked(MouseEvent e) {

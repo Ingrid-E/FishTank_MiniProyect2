@@ -9,13 +9,16 @@ import java.awt.Cursor;
 
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
-import javax.swing.DebugGraphics;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.ActionEvent;
 
+/**
+ * @author Ingrid-E {@link https://github.com/Ingrid-E}
+ * Rules GUI Window, shows rules and go back button
+ * @version 1.0
+ */
 public class RulesWindow extends JPanel{
+	//Creates atributes
 	private JLabel images, rules;
 	private JButton mainMenu, leftArrow, rightArrow;
 	private Listen listen;
@@ -23,7 +26,9 @@ public class RulesWindow extends JPanel{
 	private static final long serialVersionUID = 1L;
 	protected boolean mainMenuClicked;
 	private JLabel background;
-	
+	/**
+	 * Default public constructor start atributes and objects
+	 */
 	public RulesWindow() {
 		
 		//Initilize contents 
@@ -39,19 +44,21 @@ public class RulesWindow extends JPanel{
 		rightArrow.setFocusable(false);
 		rightArrow.addMouseListener(listen);
 		mainMenuClicked = false;
-		
+		//Current rule showing up
 		image = 1;
-		
+		//Basic Window Atributes
 		setBackground(new Color(173, 216, 230));
 		setSize(new Dimension(800, 600));
 		setLayout(null);
 		initGUI();
 	}
-
+	/**
+	 * Starts window GUI adding elements to the JFrame
+	 */
 	private void initGUI() {
 		
 		images.setSize(new Dimension(600, 442));
-		images.setIcon(new ImageIcon("src/images/rule1.png"));
+		images.setIcon(new ImageIcon(RulesWindow.class.getResource("/images/rule1.png")));
 		images.setBounds(96, 65, 600, 446);
 		add(images);
 		
@@ -84,7 +91,12 @@ public class RulesWindow extends JPanel{
 		background.setBounds(0, 0, 800, 600);
 		add(background);
 	}
-	
+	/**
+	 * @author Ingrid-E {@link https://github.com/Ingrid-E}
+	 * Class that implements MouseListener and checks if a button is pressed
+	 * if it's arrows then moves the images, and if main menu is pressed
+	 * then boolean value is changed
+	 */
 	class Listen  implements MouseListener{
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -94,14 +106,13 @@ public class RulesWindow extends JPanel{
 			if(e.getSource() == leftArrow) {
 				if(image-1 != 0) {
 					image--;
-					images.setIcon(new ImageIcon("src/images/rule" + image +".png"));
+					images.setIcon(new ImageIcon(RulesWindow.class.getResource("/images/rule" + image +".png")));
 				}
 			}
 			if(e.getSource() == rightArrow) {
-				System.out.println("src/images/rule" + image +".png");
 				if(image+1 != 5) {
 					image++;
-					images.setIcon(new ImageIcon("src/images/rule" + image +".png"));
+					images.setIcon(new ImageIcon(RulesWindow.class.getResource("/images/rule" + image +".png")));
 				}
 			}
 		}
