@@ -7,11 +7,15 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.border.LineBorder;
@@ -28,6 +32,7 @@ public class EndWindow extends JPanel{
 	private JPanel buttonPanel, textPanel;
 	private JButton playAgain, mainMenu, exit;
 	protected Boolean againClicked, menuClicked;
+	private Font font;
 	private Listen listen;
 	/**
 	 * EndWindow Constructor
@@ -35,6 +40,14 @@ public class EndWindow extends JPanel{
 	 * @param level
 	 */
 	public EndWindow(int points, int level) {
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, new File("src/fonts/Toucon__.ttf")).deriveFont(47);
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			ge.registerFont(font);
+		} catch (FontFormatException | IOException e) {
+			e.printStackTrace();
+		}
+		
 		listen = new Listen();
 		//Object
 		againClicked = false;
@@ -82,7 +95,7 @@ public class EndWindow extends JPanel{
 		endTitle.setIcon(new ImageIcon(EndWindow.class.getResource("/images/gameOverTitle.png")));
 		endTitle.setBounds(0, 0, 800, 176);
 		endTitle.setPreferredSize(new Dimension(64, 150));
-		endTitle.setFont(new Font("Touch Of Nature", Font.PLAIN, 50));
+		endTitle.setFont(font);
 		endTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		add(endTitle);
 
